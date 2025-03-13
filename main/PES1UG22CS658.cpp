@@ -2,6 +2,18 @@ pipeline {
     agent any
 
     stages {
+        // Debug Stage
+        stage('Debug') {
+            steps {
+                script {
+                    echo 'Debugging workspace contents...'
+                    sh '''
+                        ls -R
+                    '''
+                }
+            }
+        }
+
         // Build Stage
         stage('Build') {
             steps {
@@ -9,8 +21,8 @@ pipeline {
                     echo 'Building the C++ file...'
                     sh '''
                         cd main
-                        g++ -o PES1UG22CS658-1 PES1UG22CS658.cpp
-                        echo 'Build completed: PES1UG22CS658-1 executable created.'
+                        g++ -o PES1UG22CS658 PES1UG22CS658.cpp
+                        echo 'Build completed: PES1UG22CS658 executable created.'
                     '''
                 }
             }
@@ -23,7 +35,7 @@ pipeline {
                     echo 'Testing the C++ file...'
                     sh '''
                         cd main
-                        ./PES1UG22CS658-1
+                        ./PES1UG22CS658
                     '''
                 }
             }
