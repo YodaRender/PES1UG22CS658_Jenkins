@@ -1,7 +1,53 @@
-#include <iostream>
-using namespace std;
+pipeline {
+    agent any
 
-int main() {
-    cout << "Hello, World! This is Thejas." << endl;
-    return 0;
+    stages {
+        // Build Stage
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Building the C++ file...'
+                    sh '''
+                        cd main
+                        g++ -o PES1UG22CS658-1 PES1UG22CS658.cpp
+                        echo 'Build completed: PES1UG22CS658-1 executable created.'
+                    '''
+                }
+            }
+        }
+
+        // Test Stage
+        stage('Test') {
+            steps {
+                script {
+                    echo 'Testing the C++ file...'
+                    sh '''
+                        cd main
+                        ./PES1UG22CS658-1
+                    '''
+                }
+            }
+        }
+
+        // Deploy Stage
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying the application...'
+                    // Add deployment logic here (e.g., copying files to a server)
+                    echo 'Deployment completed.'
+                }
+            }
+        }
+    }
+
+    // Post-condition to handle pipeline failure
+    post {
+        failure {
+            echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+    }
 }
