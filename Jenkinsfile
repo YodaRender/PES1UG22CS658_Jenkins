@@ -2,52 +2,49 @@ pipeline {
     agent any
 
     stages {
-        // Build Stage
-        stage('Build') {
+        // Clone Repository Stage
+        stage('Clone repository') {
             steps {
-                script {
-                    echo 'Building the C++ file...'
-                    sh '''
-                        # Compile the .cpp file
-                        g++ -o PES1UG22CS658 PES1UG22CS658.cpp
-                        echo 'Build completed: PES1UG22CS658 executable created.'
-                    '''
-                }
+                git branch: 'main',
+                    url: 'https://github.com/YodaRender/PES1UG22CS658_Jenkins.git'
+            }
+        }
+
+        // Build Stage
+        stage('Build application') {
+            steps {
+                sh '''
+                    cd main
+                    g++ -o PES1UG22CS658-1 PES1UG22CS658.cpp
+                '''
             }
         }
 
         // Test Stage
-        stage('Test') {
+        stage('Test application') {
             steps {
-                script {
-                    echo 'Testing the C++ file...'
-                    sh '''
-                        # Run the compiled executable and print output
-                        ./PES1UG22CS658
-                    '''
-                }
+                sh '''
+                    cd main
+                    ./PES1UG22CS658-1
+                '''
             }
         }
 
         // Deploy Stage
-        stage('Deploy') {
+        stage('Deploy application') {
             steps {
-                script {
-                    echo 'Deploying the application...'
-                    // Add deployment logic here (e.g., copying files to a server)
-                    echo 'Deployment completed.'
-                }
+                echo 'Deploying application...'
             }
         }
     }
 
-    // Post-condition to handle pipeline failure
+    // Post-Conditions
     post {
         failure {
             echo 'Pipeline failed!'
         }
         success {
-            echo 'Pipeline succeeded!'
+            echo 'Pipeline executed successfully!'
         }
     }
 }
